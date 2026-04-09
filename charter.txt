@@ -15,7 +15,7 @@ The working group will produce the following deliverables:
 Groundwork may bewill be documented through a set of informational Internet-Drafts, which include the following key components:
 * Use cases focusing on Agent-to-agent communications, Agent-to-tool communications.
 
-* A gap analysis and requirements document that examines existing open-source protocols, and derives protocol requirements related to discovery, Agent-to-agent communications, Agent-to-tool communications, and security aspects.
+* A gap analysis and requirements document that examines existing defacto protocools implemented in open-source project(s), and derives protocol requirements related to discovery, Agent-to-agent communications, Agent-to-tool communications, and security aspects.
 
 A standard track overall AI Agent protocol framework overview: 
 This work encompasses the various building blocks and their interactions, covering AI Agent and tool discovery, Agent-to- agent/Agent-to-tool multi-modal communications, long-lived session management, and security aspects.
