@@ -53,6 +53,19 @@ The session protocol will:
 * Be a foundational building block on top of which additional protocols can be built, with appropriate layering and extension points enabling its adoption by other application-layer protocols, including existing de facto agent communication protocols such as MCP and A2A.
 * Be based on modern IETF application transfer protocols, such as QUIC, WebTransport or MoQ, based on the use cases.
 
+## (4) AI Agent AUTH-Token Exchage protocol (Standards track) 
+
+A protocol that allows an AI Agent to obtain and exchange authorization tokens with fine-grained, behavior-driven scopes bound to the specific operations that the AI Agent is permitted to perform on behalf of the user. Unlike traditional OAuth scopes which enumerate static resource permissions, agent authorization must account for dynamic behavioral boundaries, including conditional and context-dependent privileges that may vary across interactions.
+
+This deliverable :
+
+* Focuses on defining the agent-specific integration profile: how existing and emerging OAuth mechanisms are composed and applied in AI agent scenarios, including the confirmation and evidence requirements described above.
+* Addresses selective disclosure mechanisms that enable agents to reveal capabilities contextually, with cryptographic verification of presented claims independent of transport security.
+* Includes privacy-preserving presentations that prevent correlation across different interaction contexts.
+
+Any extensions to OAuth protocol mechanisms required to support agent authorization (e.g., new grant types, token structures, or authorization data types) are expected to be developed within the OAuth working group. 
+
+
 # Coordination
 
 This working group is expected to closely coordinate with other related IETF working groups:
