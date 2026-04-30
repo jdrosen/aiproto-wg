@@ -8,7 +8,7 @@ With the expansion of communication over the Internet between AI Agents and exte
 
 There are several considerations that are unique to AI Agent applications that need to be addressed while working on developing the building blocks:
 
-- AI Agents act as autonomous software entities that need to be authenticated independently of the users they represent. Establishing verifiable agent identity that is distinct from user identity is a prerequisite for meaningful authorization and accountability. 
+- AI Agents act as autonomous software entities that may need to be authenticated independently of the users they represent. Establishing verifiable agent identity that is distinct from user identity enables independent revocation of agent access, scoping of agent permissions to a subset of user permissions, and auditability of agent-initiated actions distinct from user-initiated actions. 
 
 - Interactions of AI Agents with users, other AI Agents, and tools can be long-lived, utilize significant amounts of context across various modes (text, audio, video), and require very low latency (including fast barge/interruption times). This introduces new considerations around reliability, transport session management, and data transport.
 
