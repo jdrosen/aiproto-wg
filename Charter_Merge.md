@@ -31,7 +31,9 @@ Foundational work will be documented through a set of informational Internet-Dra
 
 ## (2) AI Agent Protocol Framework (Standards Track)
 
-A standards-track framework document identifying key building blocks and detailing the protocol suite for interoperable Agent-to-agent and Agent-to-tool communications. This document serves as an architectural overview and identifies areas for subsequent protocol specification work.
+A standards-track framework document that identifies the key building blocks and defines the protocol suite for interoperable agent-to-agent and agent-to-tool communications. The document provides an architectural overview and highlights areas for subsequent protocol specification work.
+
+This is an evolving work item that can proceed in parallel with the development of specific protocol deliverables associated with the identified architectural blocks. It will iteratively integrate both existing and currently missing protocol building blocks in successive steps, until all core modules are fully incorporated.
 
 The framework will:
 
