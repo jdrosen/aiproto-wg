@@ -20,11 +20,26 @@ The scope of the working group includes agent-to-agent and agent-to-tools commun
 
 # Deliverables
 
+The working group will take a bottom-up approach, starting from the interaction patterns that are already widely deployed and layering further capabilities on top of them: a baseline for agent-to-tool interaction first, asynchronous agent-to-agent messaging built on that baseline, and agent discovery on top of the messaging layer. Real-time and multimodal session management is addressed as a complementary building block for the use cases that require it.
+
 The working group will produce the following standards track and informational documents:
+
+## Agent Interaction Baseline (Standards Track)
+
+A standards-track protocol for the interaction between an AI Agent and the external capabilities it uses to complete a task. The baseline covers:
+
+* **Tool invocation:** a structured mechanism for an AI Agent to enumerate, describe, and invoke tools — APIs that allow the agent to obtain information or perform actions — including the exchange of tool inputs and outputs and the reporting of errors.
+* **Resource access:** a uniform, filesystem-like abstraction through which an AI Agent can enumerate and read structured and unstructured context data (documents, records, application state) exposed by a server, without requiring a tool invocation for each read.
+
+The working group might take inspiration from the Model Context Protocol (MCP) in this regard and might choose to standardize aspects of the protocol.
+
+## Agent Discovery (Standards Track)
+
+A mechanism, layered on top of messaging protocols, that allows an AI Agent to discover other AI Agents and their capabilities, on the Internet or within an intranet, so that an agent can select an appropriate peer for a task.
 
 ## AI Agent Session Protocol (Standards Track)
 
-A standards-track protocol for creation and maintenance of communication sessions between AI agents, or between AI agents and tools. These sessions allow for the bidirectional exchange of data, including model context, tool call results, and chat messages.
+A standards-track protocol for creation and maintenance of communication sessions between AI agents, or between AI agents and tools, addressing the use cases that require real-time and multimodal interaction beyond what the baseline and messaging layers provide. These sessions allow for the bidirectional exchange of data, including model context, tool call results, and chat messages.
 
 The session protocol will:
 
@@ -72,17 +87,15 @@ If the working group needs any changes to or extensions of protocols specified b
 
 The following topics are explicitly out of scope for this working group:
 
-- Discovery of AI agents
-    
 - Definition of AI models, agent reasoning algorithms, or tool-specific business logic.
 
 - Standardization of agent behavior, decision-making, or planning semantics.
 
-- AI agent behavioral security (e.g., preventing the AI model itself from hallucinating, though mitigating the impact of hallucinations via protocol-level user confirmation is in scope).
+- AI agent behavioral security (e.g., preventing the AI model itself from hallucinating). Protocol-level mechanisms that allow a user to be consulted before an agent performs an operation remain in scope as part of the agent interaction baseline.
 
 - The design of human to agent user interfaces, client application UX, or the rendering of agent outputs on end-user devices
 
 # TENTATIVE: (Depends on buy in from relevant open source communities)
 
-x. Agent-to-Agent (A2A) Protocol (S)
+x. Agent-to-Agent Protocol (S)
 An Agent-to-Agent protocol that allows one AI Agent to invoke the services of another AI Agent. This protocol will allow for the exchange of user messages, including voice, video, images, and chat. It will provide basic lifecycle management, enabling the establishment, update, and termination of the services of the downstream agent. It is anticipated that this protocol would build upon existing industry work, including the MCP and A2A protocols currently under the auspices of the Linux Foundation.
