@@ -48,6 +48,7 @@ The framework will:
 * Describe the functional blocks, their relationships, and the mechanisms for structured, semi-structured, and multi-modal information exchange to support collaborative tasks across domains.
 * Describe agent-specific integration for agent authentication and authorization about how existing and emerging  mechanisms are composed and applied in AI agent scenarios, including the confirmation and evidence requirements for AI agent operations. 
 * Enable an AI Agent to create an independent identity, obtain and exchange access tokens with fine-grained, behavior-driven scopes bound to the specific operations that it is permitted to perform on behalf of the user. Agent authorization needs to account for dynamic behavioral boundaries, including conditional and context-dependent privileges that may vary across interactions and provide a way of requesting confirmation for operations that are about to be performed by AI agents.
+* Specify the verification behavior of security-relevant artifacts (identity, authorization, delegation, and operation confirmation evidence) deterministically, such that verification correctness does not depend on assumptions about agent behavior. Deliverables defining such artifacts will include conformance test vectors covering both artifacts that a verifier must accept and adversarial artifacts that a verifier must refuse.
 * Identify the protocol suite covering session management, transport, security, and identity building blocks.
 
 ## Use Cases, Gap Analysis, and Requirements (Informational)
