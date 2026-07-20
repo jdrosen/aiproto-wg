@@ -80,8 +80,3 @@ The following topics are explicitly out of scope for this working group:
 - AI agent behavioral security (e.g., preventing the AI model itself from hallucinating, though mitigating the impact of hallucinations via protocol-level user confirmation is in scope).
 
 - The design of human to agent user interfaces, client application UX, or the rendering of agent outputs on end-user devices
-
-# TENTATIVE: (Depends on buy in from relevant open source communities)
-
-x. Agent-to-Agent (A2A) Protocol (S)
-An Agent-to-Agent protocol that allows one AI Agent to invoke the services of another AI Agent. This protocol will allow for the exchange of user messages, including voice, video, images, and chat. It will provide basic lifecycle management, enabling the establishment, update, and termination of the services of the downstream agent. It is anticipated that this protocol would build upon existing industry work, including the MCP and A2A protocols currently under the auspices of the Linux Foundation.
