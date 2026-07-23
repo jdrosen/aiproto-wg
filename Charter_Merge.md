@@ -1,62 +1,47 @@
 # Agent Communication Protocols (acp) Proposed Charter
 
-The Agent Communication Protocols (acp) Working Group will work on defining protocol building blocks for enabling interoperability for AI Agent applications across the Internet. An AI agent is an autonomous, adaptive intelligent software system that uses AI models to complete a specific task. AI Agents often interact with users via chat or voice, performing tasks based on the flow of the conversation. To complete tasks on behalf of a human user or another AI agent, they can independently make decisions, execute actions, and interact with other AI agents and tools.
+The Agent Communication Protocols (acp) Working Group will work on defining protocol building blocks for enabling interoperability for AI Agent applications across the Internet. 
 
-With the expansion of communication over the Internet between AI Agents and external resources that can be tools or other AI Agents, reliable communications across platforms and vendors becomes increasingly important. The role of the acp working group is to facilitate such interoperability so that tools and agents can be provided by multiple vendors.
+An AI agent is an autonomous, adaptive intelligent software system that uses AI models (typically language models) to complete a specific task. Users can interact with AI agents through a variety of user interfaces, all of them ultimately enabling the user to start a dialog with the agent, provide input in the form of voice, text, images, structured data, and other content, and receive responses from the AI agent - also in the form of voice, text, images, structured data, and other content. Users can typically perform operations like pausing the conversation, ending it, or resuming it - potentially from a different device. Dialogs can be extremely brief, or they can be extremely long running - potentially over days or weeks. Ultimately the dialog is used to form the context that is fed into the language model for inference. 
+
+In the same way users interact with AI Agents, AI agents can interact with each other. Many patterns have emerged for inter-agent communication - orchestration, delegation, decomposition, and so on. In all cases, one AI Agent is invoking the services of another - beginning a new dialog, providing input in the form of text, voice, images, structured data or other content, and receiving responses in the form of text, voice, images, structured data or other content. Structured data is of particular interest here, as it can sometimes be used as pure input to or output from the language model (e.g., a JSON document representing an object like an airline flight or banking transaction), and in other cases it is meta-data meant for the harness or user interface (e.g., a count of tokens consumed). A key observation is that, whereas the user to AI agent interactions can be done without any form of protocol standardization using a browser or desktop application, agent to agent dialogs require a standardized protocol for interoperability. 
+
+Agents can also invoke tools, and in some cases the exchange between the agent and the tool has a similar shape as the agent-to-agent and user-to-agent communication: there is a long-lived dialog, and through it, input is passed in the form of text, voices, images, structured data or other content, and it receives responses in the form of text, voice, images, structured data or other content. Consider for example a coding agent that wants to clone a repository. It might invoke a github clone tool. The tool might require the user to specify a specific repository, or provide a credential, resulting a brief interactive dialog by the tool to request the information reqiured to clone the repository. Here too, there is a need for standardized protocols so that AI agents can invoke tools over a network. Of course, if a tool call is just a REST API invocation, there is no need for agentic dialog management. 
+
+Rather than solve them separately for each use case (user-to-agent, agent-to-agent and agent-to-tool), it makes sense to decompose the solution into a single, common baseline protocol for agentic dialog management, and ontop of that, layer functionality for these three (and other future) use cases.
+
 
 # Key Considerations
 
-There are several considerations that are unique to AI Agent applications that need to be addressed while working on developing the building blocks:
+Design of an agentic dialog management protocol is challenging (but solvable!) for several reasons:
 
 - AI Agents act as autonomous software entities that may need to be authenticated independently of the users they represent. Establishing verifiable agent identity that is distinct from user identity enables independent revocation of agent access, scoping of agent permissions to a subset of user permissions, and auditability of agent-initiated actions distinct from user-initiated actions.
 
-- AI Agents possess unique and specialized functional capabilities which can be enhanced by collaboratively working with other agents or tools. This brings new considerations for how these specialized capabilities can be leveraged to select AI agents or tools for collaboration, initiate communication and maintain interactions, including across network boundaries.
+- Agentic dialogs can be potentially very long lived. This introduces requirements for lifecycle management (starting them, ending them, pausing and resuming them) and for migrating them across hosts (e.g., an AI agent running on one host can begin a dialog wih a downstream AI Agent, and after that host crashes, it can be resumed from a different host in the same cluser with no loss of context)
 
-- Interactions of AI Agents with users, other AI Agents, and tools can be long-lived, utilize significant amounts of context across various modes (text, audio, video), and require very low latency (including fast barge/interruption times). This introduces new considerations around reliability, transport session management, and data transport.
+- Agentic dialogs can include real-time media, such as voice, video, streaming text (generated as the LLM performs inference) - generated by both sides of the dialog. This introduces requirements for low latency transport, similar to voice over IP technologies
+
+- Agentic dialogs can include exchange of structured data that is meant for injection into language model context (eg., the output of a tool call), or, alternatively, meant for processing by a user interface or harness (e.g., token count, model version, time required for inference, or reasoning), or both. 
+
+- Multiple AI agents across multiple agentic dialogs might be involved in the satisfaction of an initial user request (e.g., "book me a vacation" spawns a research agent, a flight reservation agent and a hotel selection agent), requiring transmission of correlation identifiers to tie these dialogs together
 
 - To protect data exchanged between AI Agents (and between AI Agents and tools) over potentially untrusted networks, particularly when handling sensitive information (such as personal data or conversational context), mechanisms are required to establish and verify identity, ensure confidentiality, integrity, authenticity of the exchanged data, and delegated authorization across AI Agent chains. This introduces new considerations around protocol-level security and privacy mechanisms.
 
-The scope of the working group includes agent-to-agent and agent-to-tools communication protocols. The working group will document common use-cases to derive requirements for these protocols. Human-agent communication protocols — specifically the protocol-level mechanisms for establishing sessions, negotiating modalities, and exchanging multimodal data between a human user and an AI Agent — are also in scope.
 
 # Deliverables
 
-The working group will produce the following standards track and informational documents. The work on these deliverables is expected to proceed in parallel.
+The working group will produce a standards-track protocol for agentic dialog management, usable for three core applications: user to AI agent, AI agent to AI agent, and AI agent to tool. 
 
-## AI Agent Session Protocol (Standards Track)
+This protocol will make use of existing IETF standards for transport, including transport of real-time media, such as QUIC, WebTransport, WebRTC or MOQ. It will also make use of existing protocols for security, including encryption, authentication and authorization. As such, the protocol will include sufficient framework and architectural definitions so as to allow all of the required pieces to come together to ensure interoperability. 
 
-A standards-track protocol for creation and maintenance of communication sessions between AI agents, or between AI agents and tools. These sessions allow for the bidirectional exchange of data, including model context, tool call results, and chat messages.
+The agentic dialog management protocol will be point-to-point in the sense that it involves a bilateral exchange of information between a pair of actors (e.g., between a research agent and a booking agent), noting that these actors may manifest across multiple IP hosts through the lifetime of the agentic dialog. More complex topologies - such as one agent spawning a number of sub-agents - will be supported only in so much as they are multiple distinct agentic dialogs with some correlation information shared across them. 
 
-The session protocol will:
+This protocol is expected to be a foundational building block on top of which specific protocols for user to AI agent, AI agent to AI agent, and AI agent to tool can be built. Functionality specific to, and required only by, user->agent (as opposed to agent->agent or agent->tool) would be out of scope for this protocol, and built into protocols residing ontop of it. 
 
-* Provide timed (short or long-lived) session management, enabling the establishment, update, context handling, and termination of the services of interacting agents and tools.
-* Facilitate highly scalable and reliable session management, capable of surviving network and server failures while supporting graceful recovery.
-* Support concurrent exchange of real-time data (such as voice and video), semi-real-time data (such as chat), and non-real-time data (such as tool call inputs and outputs).
-* Supports point-to-point and point-to-multipoint communication topologies.
+The protocol will not require that it be used exclusively by an AI agent, or that it be only used for the three bilateral use cases noted above. It can be used in any other use case which shares the same underlying requirements. However, in order to focus the effort, the working groupw will focus on the common dialog management requirements for just these three. 
 
-This protocol is expected to be a foundational building block on top of which additional protocols can be built. It is anticipated that the AI Agent session protocol will utilize modern IETF application transfer protocols, such as QUIC, WebTransport, WebRTC or MOQ, based on the anticipated use cases. The protocol must also be usable by other application layer protocols with the appropriate layering and extension points enabling its adoption by any application. Examples of protocols that can utilize this include the existing de facto standard agent communication protocols such as the MCP and A2A protocols being worked on by the Linux Foundation.
+The protocol will assume there is sufficient pre-established relationship between the two actors in the protocol to allow their relationship to be authenticated and their output authorized. 
 
-## AI Agent Protocol Framework (Standards Track)
-
-A standards-track framework that identifies the key building blocks and defines the protocol suite for interoperable agent-to-agent and agent-to-tool communications. The framework provides an architectural overview and highlights areas for subsequent protocol specification work.
-
-This is an evolving work item that can proceed in parallel with the development of specific protocol deliverables associated with the identified architectural blocks. It will iteratively integrate both existing and currently missing protocol building blocks in successive steps, until all core modules are fully incorporated.
-
-The framework will:
-
-* Enable AI Agents to select and collaborate with other AI Agents on the Internet or intranet, deployed in various interconnected domains and ecosystems, to execute simple or complex tasks.
-* Allow multi-modal collaboration using varied data formats such as text, images, video, audio, and structured data with exchange of multi-modal contexts.
-* Describe the functional blocks, their relationships, and the mechanisms for structured, semi-structured, and multi-modal information exchange to support collaborative tasks across domains.
-* Describe agent-specific integration for agent authentication and authorization about how existing and emerging  mechanisms are composed and applied in AI agent scenarios, including the confirmation and evidence requirements for AI agent operations.
-* Enable an AI Agent to create an independent identity, obtain and exchange access tokens with fine-grained, behavior-driven scopes bound to the specific operations that it is permitted to perform on behalf of the user. Agent authorization needs to account for dynamic behavioral boundaries, including conditional and context-dependent privileges that may vary across interactions and provide a way of requesting confirmation for operations that are about to be performed by AI agents. Any extensions to OAuth protocol mechanisms required to support agent authorization are expected to be developed within the OAuth working group. Any extensions required for independent AI agent identity are expected to be developed within the wimse working group.
-* Identify the protocol suite covering session management, transport, security, and identity building blocks.
-* The framework may be delivered as multiple standards-track documents, as the working group determines based on the structure and maturity of the building blocks.
-
-## Use Cases, Gap Analysis, and Requirements (Informational)
-
-Foundational work will be documented through a set of informational Internet-Drafts covering:
-
-* **Use cases** focused on Agent-to-agent and Agent-to-tool communications, used to verify the suitability of existing protocols and the protocols being developed.
-* **Gap analysis and requirements** based on examination of existing de facto standard protocols implemented in open-source projects, from which necessary protocol requirements are derived.
 
 # Coordination
 
@@ -72,6 +57,8 @@ If the working group needs any changes to or extensions of protocols specified b
 # Out of Scope
 
 The following topics are explicitly out of scope for this working group:
+
+- Discovery of AI agents
 
 - Implementation details of AI Agents, including definition of AI models, backend AI infrastructure network and protocols, agent reasoning algorithms, or tool-specific business logic.
 
